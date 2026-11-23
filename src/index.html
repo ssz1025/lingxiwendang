@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>灵犀文档</title>
+  </head>
+  <body>
+    <div id="app">
+      <aside class="sidebar">
+        <div class="sidebar-head">
+          <div class="brand">
+            <button class="brand-main" id="btnHome" title="知识库列表">
+              <div class="brand-logo">灵</div>
+              <div class="brand-text">
+                <span class="brand-name" id="kbName">灵犀文档</span>
+                <span class="brand-sub" id="rootPath">正在加载…</span>
+              </div>
+            </button>
+            <button class="icon-btn" id="btnSwitchKb" title="知识库列表">
+              <span data-icon="folder-switch"></span>
+            </button>
+            <button class="icon-btn" id="btnCollapseSidebar" title="收起侧边栏">
+              <span data-icon="panel-left-close"></span>
+            </button>
+          </div>
+          <div class="search-box">
+            <span data-icon="search" class="search-icon"></span>
+            <input id="searchInput" type="text" placeholder="搜索文档或内容" autocomplete="off" spellcheck="false" />
+            <button class="search-clear hidden" id="searchClear" title="清空">
+              <span data-icon="close"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="tree-actions">
+          <button class="primary-btn" id="btnNewDoc">
+            <span data-icon="file-plus"></span>
+            <span>新建文档</span>
+          </button>
+          <button class="icon-btn" id="btnNewFolder" title="新建文件夹">
+            <span data-icon="folder-plus"></span>
+          </button>
+          <button class="icon-btn" id="btnRefresh" title="刷新目录">
+            <span data-icon="refresh"></span>
+          </button>
+        </div>
+
+        <div class="kb-side">
+          <div class="kb-side-head">
+            <span>知识库</span>
+            <span class="kb-side-count" id="kbSideCount"></span>
+          </div>
+          <div class="kb-side-list" id="kbSideList"></div>
+        </div>
+
+        <div class="tree-scroll">
+          <div class="search-panel hidden" id="searchPanel">
+            <div class="search-panel-head">
+              <span>全文搜索结果</span>
+              <span id="searchCount" class="muted"></span>
+            </div>
+            <div id="searchResults" class="search-results"></div>
+          </div>
+          <div id="fileTree" class="file-tree"></div>
+          <div id="treeEmpty" class="tree-empty hidden">
+            <span data-icon="inbox"></span>
+            <p>还没有文档</p>
+            <button class="ghost-btn small" id="btnEmptyNew">新建第一篇文档</button>
+          </div>
+        </div>
+
+        <div class="sidebar-foot">
+          <button class="foot-btn" id="btnSettings">
+            <span data-icon="settings"></span>
+            <span>设置</span>
+          </button>
+          <button class="foot-btn" id="btnOpenRoot">
+            <span data-icon="folder-open"></span>
+            <span>打开目录</span>
+          </button>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="titlebar">
+          <div class="title-left">
+            <button class="icon-btn hidden" id="btnExpandSidebar" title="展开侧边栏">
+              <span data-icon="panel-left-open"></span>
+            </button>
+            <div class="breadcrumb" id="breadcrumb"></div>
+          </div>
+          <div class="title-actions">
+            <div class="segmented" id="viewToggle">
+              <button data-mode="split" title="分屏预览">分屏</button>
+              <button data-mode="edit" title="仅编辑">编辑</button>
+              <button data-mode="preview" title="仅预览">预览</button>
+            </div>
+            <span class="divider"></span>
+            <button class="icon-btn" id="btnFormat" title="自动排版 (⌘⇧L)">
+              <span data-icon="wand"></span>
+            </button>
+            <button class="icon-btn" id="btnHighlight" title="高亮块 (⌘⌥B)">
+              <span data-icon="highlight"></span>
+            </button>
+            <button class="icon-btn" id="btnAi" title="AI 助手">
+              <span data-icon="sparkles"></span>
+            </button>
+            <button class="icon-btn" id="btnExport" title="导出知识库">
+              <span data-icon="download"></span>
+            </button>
+            <button class="icon-btn" id="btnMore" title="更多操作">
+              <span data-icon="more"></span>
+            </button>
+          </div>
+        </header>
+
+        <div class="doc-title-row hidden" id="docTitleRow">
+          <input id="docTitle" class="doc-title" spellcheck="false" />
+          <span class="save-state" id="saveState"><i></i>已保存</span>
+        </div>
+
+        <div class="content mode-split" id="content">
+          <div class="editor-pane" id="editorPane"><div id="editor"></div></div>
+          <div class="pane-resizer" id="paneResizer"></div>
+          <div class="preview-pane" id="previewPane">
+            <article id="preview" class="markdown-body"></article>
+          </div>
+
+          <div class="welcome index-view hidden" id="indexView">
+            <div class="welcome-inner index-inner">
+              <div class="index-head">
+                <div class="index-heading">
+                  <div class="index-logo" id="indexLogo">灵</div>
+                  <div class="index-heading-text">
+                    <h1 id="indexTitle">知识库</h1>
+                    <p class="index-path" id="indexPath"></p>
+                  </div>
+                </div>
+                <div class="index-actions">
+                  <button class="primary-btn" id="indexNewDoc">
+                    <span data-icon="file-plus"></span><span>新建文档</span>
+                  </button>
+                  <button class="ghost-btn" id="indexNewFolder">
+                    <span data-icon="folder-plus"></span><span>新建文件夹</span>
+                  </button>
+                  <button class="icon-btn" id="indexOpenFolder" title="在文件管理器中打开">
+                    <span data-icon="folder-open"></span>
+                  </button>
+                </div>
+              </div>
+              <div class="index-meta" id="indexMeta"></div>
+
+              <div class="index-section hidden" id="indexRecentSection">
+                <div class="index-section-head"><h2>最近编辑</h2></div>
+                <div class="index-list" id="indexRecentList"></div>
+              </div>
+
+              <div class="index-section hidden" id="indexDirsSection">
+                <div class="index-section-head"><h2>文件夹</h2><span id="indexDirCount"></span></div>
+                <div class="index-list" id="indexDirs"></div>
+              </div>
+
+              <div class="index-section hidden" id="indexDocsSection">
+                <div class="index-section-head"><h2>文档</h2><span id="indexDocCount"></span></div>
+                <div class="index-list" id="indexDocs"></div>
+              </div>
+
+              <div class="index-empty hidden" id="indexEmpty">
+                <span data-icon="inbox"></span>
+                <p>这个位置还没有内容</p>
+                <button class="ghost-btn small" id="indexEmptyNew">新建文档</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="welcome kb-view hidden" id="kbListView">
+            <div class="welcome-inner index-inner">
+              <div class="kb-head">
+                <div class="kb-heading">
+                  <h1>知识库</h1>
+                  <p class="index-path" id="kbListMeta">全部本地知识库</p>
+                </div>
+                <button class="primary-btn" id="kbAdd">
+                  <span data-icon="folder-plus"></span><span>添加知识库</span>
+                </button>
+              </div>
+
+              <div class="index-section">
+                <div class="index-section-head">
+                  <h2>常用</h2>
+                  <span id="kbListCount"></span>
+                </div>
+                <div class="kb-grid" id="kbList"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="statusbar">
+          <div class="status-left">
+            <span id="wordCount">0 字</span>
+            <i class="separator-dot"></i>
+            <span id="lineCount">0 行</span>
+            <i class="separator-dot"></i>
+            <span id="readTime">约 0 分钟阅读</span>
+          </div>
+          <div class="status-right">
+            <span class="status-msg" id="statusMsg"></span>
+            <button class="status-theme" id="btnTheme" title="切换主题">
+              <span data-icon="moon"></span>
+            </button>
+          </div>
+        </footer>
+      </main>
+
+      <aside class="ai-panel hidden" id="aiPanel">
+        <div class="ai-head">
+          <div class="ai-title"><span data-icon="sparkles"></span> AI 助手</div>
+          <div class="ai-head-actions">
+            <button class="icon-btn" id="btnAiSettings" title="AI 设置">
+              <span data-icon="settings"></span>
+            </button>
+            <button class="icon-btn" id="btnAiClose" title="关闭">
+              <span data-icon="close"></span>
+            </button>
+          </div>
+        </div>
+        <div class="ai-context" id="aiContext">未打开文档</div>
+        <div class="ai-kb-row">
+          <label class="ai-kb-toggle">
+            <input type="checkbox" id="aiUseKb" checked />
+            <span>使用本地知识库回答</span>
+          </label>
+          <span class="ai-kb-status" id="aiKbStatus"></span>
+        </div>
+        <div class="ai-quick" id="aiQuick"></div>
+        <div class="ai-messages" id="aiMessages"></div>
+        <div class="ai-input-wrap">
+          <textarea id="aiInput" rows="3" placeholder="向知识库提问，例如：如何配置本地存储目录？" spellcheck="false"></textarea>
+          <div class="ai-input-actions">
+            <span class="ai-hint">⌘ / Ctrl + Enter 发送</span>
+            <button class="primary-btn small" id="btnAiSend">
+              <span data-icon="send"></span><span>发送</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div id="modalRoot"></div>
+    <div id="contextMenu" class="context-menu hidden"></div>
+    <div id="toast" class="toast hidden"></div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
